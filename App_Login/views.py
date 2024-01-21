@@ -2,9 +2,13 @@ from django.shortcuts import render, HttpResponseRedirect
 from App_Login.forms import CreateNewUser, EditProfile
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse, reverse_lazy
-from App_Login.models import UserProfile
+from App_Login.models import UserProfile, Follow
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
+
+from App_Posts.forms import PostForm
+
+from django.contrib.auth.models import User
 
 # Create your views here.
 
@@ -45,9 +49,48 @@ def edit_profile(request):
         if form.is_valid():
             form.save(commit=True)
             form = EditProfile(instance=current_user)
+            return HttpResponseRedirect(reverse('App_Login:profile'))
     return render(request, 'App_Login/profile.html', context={'form': form, 'title': 'Edit Profile . Social'})
 
 @login_required
 def logout_user(request):
     logout(request)
     return HttpResponseRedirect(reverse('App_Login:login'))
+
+@login_required
+def profile(request):
+    form = PostForm()
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            return HttpResponseRedirect(reverse('home'))
+    return render(request, 'App_Login/user.html', context={'title': 'User', 'form': form})
+
+@login_required
+def user(request, username):
+    user_other = User.objects.get(username=username)
+    already_followed = Follow.objects.filter(follower=request.user, following=user_other)
+    if user_other == request.user:
+        return HttpResponseRedirect(reverse('App_Login:profile'))
+    return render(request, 'App_Login/user_other.html', context={'user_other': user_other, 'already_followed': already_followed})
+
+@login_required
+def follow(request, username):
+    following_user = User.objects.get(username=username)
+    follower_user = request.user
+    already_followed = Follow.objects.filter(follower=follower_user, following=following_user)
+    if not already_followed:
+        followed_user = Follow(follower=follower_user, following=following_user)
+        followed_user.save()
+    return HttpResponseRedirect(reverse('App_Login:user', kwargs={'username': username}))
+
+@login_required
+def unfollow(request, username):
+    following_user = User.objects.get(username=username)
+    follower_user = request.user
+    already_followed = Follow.objects.filter(follower=follower_user, following=following_user)
+    already_followed.delete()
+    return HttpResponseRedirect(reverse('App_Login:user', kwargs={'username':username}))
