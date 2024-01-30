@@ -4,7 +4,9 @@ from django.contrib.auth.decorators import login_required
 
 from App_Login.models import UserProfile, Follow
 from django.contrib.auth.models import User
+
 from App_Posts.models import Post, Like
+
 # Create your views here.
 
 @login_required

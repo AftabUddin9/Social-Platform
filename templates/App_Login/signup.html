@@ -12,7 +12,7 @@
     }
     .log_in {
         width: 550px;
-        padding: 20px;
+        padding: 25px;
         border: 1px solid #ccc;
     }
 </style>
@@ -25,7 +25,7 @@
         <form method="POST">
             {{ form|crispy }}
             {% csrf_token %}
-            <button type="submit" style = "width:100%" class="btn btn-primary"> Sign Up</button>
+            <button type="submit" style="width:100%" class="btn btn-primary"> Sign Up</button>
         </form>
     </div>
     <br>

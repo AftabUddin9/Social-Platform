@@ -16,10 +16,12 @@
     }
 </style>
 {% endblock %}
+
+{% block body_block %}
 <div class="row">
     <div class="col-sm-4">
         {% if user_other.user_profile.profile_pic %}
-        <img src="/media/{{user_other.user_profile.Profile_pic}}" width="250px" height="250px" class="rounded-circle">
+        <img src="/media/{{user_other.user_profile.profile_pic}}" width="250px" height="250px" class="rounded-circle">
         {% else %}
         <img src="/media/default.png" width="250px" height="250px" class="rounded-circle">
         {% endif %}
@@ -35,7 +37,7 @@
         <br>
         <h4>{{user_other.post.count}} posts &nbsp; &nbsp; {{user_other.following.count}} followers &nbsp; &nbsp; {{user_other.follower.count}} following</h4>
         <br>
-        <h4>{{user_other.user_profile.full_name}}</h4>
+        <h3>{{user_other.user_profile.full_name}}</h3>
         <p>{{user_other.user_profile.description|linebreaks}}</p>
     </div>
 </div>
@@ -49,5 +51,4 @@
     </div>
     {% endfor %}
 </div>
-{% block body_block %}
 {% endblock %}

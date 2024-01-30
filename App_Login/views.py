@@ -23,7 +23,7 @@ def sign_up(request):
             user_profile = UserProfile(user=user)
             user_profile.save()
             return HttpResponseRedirect(reverse('App_Login:login'))
-    return render(request, 'App_Login/signup.html', context={'title': 'Sign up . Instagram', 'form': form})
+    return render(request, 'App_Login/signup.html', context={'title': 'Sign up . Sinstagram', 'form': form})
 
 def login_page(request):
     form = AuthenticationForm()
@@ -37,7 +37,7 @@ def login_page(request):
                 login(request, user)
                 return HttpResponseRedirect(reverse('App_Posts:home'))
 
-    return render(request, 'App_Login/login.html', context={'title': 'Login', 'form': form})
+    return render(request, 'App_Login/login.html', context={'title': 'Login . Sinstagram', 'form': form})
 
 
 @login_required
@@ -50,7 +50,7 @@ def edit_profile(request):
             form.save(commit=True)
             form = EditProfile(instance=current_user)
             return HttpResponseRedirect(reverse('App_Login:profile'))
-    return render(request, 'App_Login/profile.html', context={'form': form, 'title': 'Edit Profile . Social'})
+    return render(request, 'App_Login/profile.html', context={'form': form, 'title': 'Edit Profile . Sinstagram'})
 
 @login_required
 def logout_user(request):
